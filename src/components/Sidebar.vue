@@ -11,8 +11,8 @@
       />
 
       <div v-if="isSidebarOpen" class="ml-3">
-        <h3  class="font-bold text-sm">Azizbek Nayimov</h3>
-        <p class="text-xs text-gray-500">Admin</p>
+        <h3  class="font-bold text-sm">{{ authStore.state.user?.fullName }}</h3>
+        <p class="text-xs text-gray-500">{{ authStore.state.user?.email }}</p>
       </div>
     </div>
 
@@ -61,7 +61,7 @@
 
       <button
         class=" flex items-center text-gray-700 font-medium cursor-pointer hover:text-red-500 w-full"
-        @click="logout"
+        @click="authStore.logout()"
       >
         <span class="mdi mdi-logout text-xl"></span>
         <span v-if="isSidebarOpen" class="ml-2 text-sm">Chiqish</span>
@@ -86,15 +86,10 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/authStore';
 import { ref } from 'vue';
-import router from '@/router';
-
 let isSidebarOpen = ref(true);
-
-
-function logout() {
-  router.push('/login');
-}
+const authStore = useAuthStore();
 </script>
 
 <style scoped></style>

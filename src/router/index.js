@@ -1,6 +1,16 @@
 import { defineAsyncComponent } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
+const requireAuth = () => !!localStorage.getItem("token");
+
+const ifAuthorized = () => {
+  return requireAuth() ? true : "/login";
+};
+
+const ifNotAuthorized = () => {
+  return !requireAuth() ? true : "/";
+};
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -10,6 +20,7 @@ const router = createRouter({
       meta: {
         layout: defineAsyncComponent(() => import('@/layouts/MainLayout.vue')),
       },
+      beforeEnter: ifAuthorized
     },
     {
       path: '/login',
@@ -17,6 +28,7 @@ const router = createRouter({
       meta: {
         layout: defineAsyncComponent(() => import('@/layouts/BlankLayout.vue')),
       },
+      beforeEnter: ifNotAuthorized
     },
     {
       path: '/users',
@@ -24,6 +36,7 @@ const router = createRouter({
       meta: {
         layout: defineAsyncComponent(() => import('@/layouts/MainLayout.vue')),
       },
+      beforeEnter: ifAuthorized
     },
     {
       path: '/companies',
@@ -31,6 +44,7 @@ const router = createRouter({
       meta: {
         layout: defineAsyncComponent(() => import('@/layouts/MainLayout.vue')),
       },
+      beforeEnter: ifAuthorized
     },
     {
       path: '/customers',
@@ -38,6 +52,7 @@ const router = createRouter({
       meta: {
         layout: defineAsyncComponent(() => import('@/layouts/MainLayout.vue')),
       },
+      beforeEnter: ifAuthorized
     },
     {
       path: '/settings',
@@ -45,6 +60,7 @@ const router = createRouter({
       meta: {
         layout: defineAsyncComponent(() => import('@/layouts/MainLayout.vue')),
       },
+      beforeEnter: ifAuthorized
     }
 
   ],

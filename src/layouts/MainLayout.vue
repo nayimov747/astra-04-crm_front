@@ -7,6 +7,8 @@
 
 <script setup>
 import Sidebar from '@/components/Sidebar.vue';
+import { Button } from 'primevue';
+
 </script>
 
 <style scoped></style>
