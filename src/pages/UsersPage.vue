@@ -155,7 +155,6 @@ let term = ref("");
 
 function resetForm() {
   userData.value = {
-    id: null,
     fullName: "",
     email: "",
     password: "",

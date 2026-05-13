@@ -41,14 +41,14 @@
         <span class="mdi mdi-domain text-xl"></span>
         <span v-if="isSidebarOpen" class="ml-2 text-sm">Kompaniyalar</span>
       </RouterLink>
-      <RouterLink
+      <!-- <RouterLink
         active-class=" !text-blue-600"
         to="/customers"
         class="flex items-center text-gray-700 font-medium mb-3 cursor-pointer hover:text-blue-500"
       >
         <span class="mdi mdi-account-tie text-xl"></span>
         <span v-if="isSidebarOpen" class="ml-2 text-sm">Mijozlar</span>
-      </RouterLink>
+      </RouterLink> -->
 
       <RouterLink
         active-class=" !text-blue-600"
