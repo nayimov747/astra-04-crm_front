@@ -10,9 +10,8 @@ Modern CRM frontend built with Vue 3 and Tailwind CSS.
 ---
 
 ## Preview
-
-![Dashboard](https://freeimage.host/i/BmBI6X9)
-![Dashboard](https://freeimage.host/i/BmBuKGe)
+![Login](https://iili.io/BmBlIBp.png)
+![Dashboard](https://iili.io/BmB0ZOu.png)
 
 ---
 
