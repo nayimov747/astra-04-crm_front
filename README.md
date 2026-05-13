@@ -1,38 +1,54 @@
-# astra-04-crm_front
+# Astra CRM Frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+Modern CRM frontend built with Vue 3 and Tailwind CSS.
 
-## Recommended IDE Setup
+![Vue](https://img.shields.io/badge/Vue-3-42b883?style=for-the-badge&logo=vue.js)
+![Pinia](https://img.shields.io/badge/Pinia-State-yellow?style=for-the-badge)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-38bdf8?style=for-the-badge&logo=tailwindcss)
+![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Recommended Browser Setup
+## Preview
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+![Dashboard](https://freeimage.host/i/BmBI6X9)
+![Dashboard](https://freeimage.host/i/BmBuKGe)
 
-## Customize configuration
+---
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+## Features
 
-## Project Setup
+- Authentication
+- Dashboard
+- Company management
+- Customer management
+- Search & filtering
+- Responsive design
+- Clean modern UI
 
-```sh
+---
+
+## Tech Stack
+
+- Vue 3
+- Pinia
+- Vue Router
+- Axios
+- Tailwind CSS
+
+---
+
+## Backend Repository
+
+👉 [CRM Backend API](https://github.com/nayimov747/astra-04-crm_api)
+
+---
+
+## Installation
+
+```bash
+git clone https://github.com/nayimov747/astra-04-crm_front.git
+
+cd astra-04-crm_api
+
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
