@@ -124,8 +124,8 @@ export const useCompanyStore = defineStore("company", () => {
 
   return {
     state,
-    fetchMyCompanies,
     getMyCustomersCount,
+    fetchMyCompanies,
     createMyCompany,
     updateMyCompany,
     deleteMyCompany,

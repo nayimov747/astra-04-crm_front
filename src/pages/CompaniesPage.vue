@@ -1,31 +1,85 @@
 <template>
   <div class="flex flex-col gap-5 w-full">
-    <div
-      class="p-5 bg-white rounded-lg shadow-md flex items-center gap-2 justify-between"
-    >
-      <input
-        type="text"
-        name="search"
-        id="search"
-        placeholder="Search..."
-        class="w-100 p-2 border border-gray-300 rounded-md"
-        v-model="term"
-      />
+    <div class="px-5 py-3 bg-white flex items-center gap-2 justify-end">
       <button
-        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 text-nowrap cursor-pointer"
+        class="bg-[#109CF1] text-white text-[13px] font-semibold px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 text-nowrap cursor-pointer"
         @click="visible = true"
       >
-        Kompaniya qo'shish 
+        Kompaniya qo'shish
       </button>
     </div>
-    <div class="p-5 bg-white shadow-md rounded-lg">
+
+    <h4 class="text-xs">
+      Kompaniya:
+      <span class="text-[#109CF1]"
+        >Hammasi <i class="mdi mdi-menu-down -ml-1"></i
+      ></span>
+    </h4>
+
+    <div class="grid grid-cols-4 gap-5">
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchCompany"
+          id="searchCompany"
+          placeholder="Kompaniya qidirish"
+          v-model="termCompany"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+        />
+      </div>
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchEmail"
+          id="searchEmail"
+          placeholder="Email qidirish"
+          v-model="termEmail"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+        />
+      </div>
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchPassword"
+          id="searchPassword"
+          placeholder="Parol qidirish"
+          v-model="termPassword"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+        />
+      </div>
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchActivity"
+          id="searchActivity"
+          placeholder="So'ngi faollikni qidirish"
+          v-model="termActivity"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+        />
+      </div>
+    </div>
+
+    <div v-if="filteredCompanies.length > 0" class="p-5 bg-white shadow-md">
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-b border-b-gray-300">
-            <th class="text-left p-2">ID</th>
-            <th class="text-left p-2">Kompaniya nomi</th>
-            <th class="text-left p-2">Telefon</th>
-            <th class="text-left p-2">Amallar</th>
+            <!-- <th class="text-left p-2">ID</th> -->
+            <th class="text-left p-2 w-72 text-[#334d6e8c] text-[13px]">
+              Kompaniya nomi
+            </th>
+            <th class="text-left p-2 w-72 text-[#334d6e8c] text-[13px]">
+              Email
+            </th>
+            <th class="text-left p-2 w-72 text-[#334d6e8c] text-[13px]">Parol</th>
+            <th class="text-left p-2 text-[#334d6e8c] text-[13px]">
+              So'ngi faollik
+            </th>
+
+            <th class="text-left p-2"></th>
           </tr>
         </thead>
         <tbody>
@@ -34,13 +88,23 @@
               @click="toggleCompany(company['@id'])"
               class="border-b border-b-gray-300 hover:bg-gray-100 transition-colors duration-300 cursor-pointer"
             >
-              <td class="p-2">{{ company["@id"].split("/").pop() }}</td>
-              <td class="p-2">{{ company.name }}</td>
-              <td class="p-2">{{ company.phone }}</td>
+              <!-- <td class="p-2">{{ company["@id"].split("/").pop() }}</td> -->
+              <td class="p-2 text-[15px] text-[#323C47] font-medium">
+                {{ company.name }}
+              </td>
+              <td class="p-2 text-[13px] text-[#707683]">
+                {{ company.email }}
+              </td>
+              <td class="p-2 text-[13px] text-[#707683]">
+                {{ company.password }}
+              </td>
+              <td class="p-2 text-[13px] text-[#707683]">
+                {{ lastActivity(company.createdAt) }}
+              </td>
 
               <td class="p-2 flex gap-2">
                 <span
-                  class="mdi mdi-pencil w-8 h-8 flex justify-center items-center text-blue-400 text-xl rounded-full cursor-pointer"
+                  class="mdi mdi-pencil w-8 h-8 flex justify-center items-center text-[#2ED47A] text-xl rounded-full cursor-pointer"
                   @click.stop="editCompany(company)"
                 ></span>
 
@@ -72,17 +136,15 @@
                     <li
                       v-for="customer in company.customers"
                       :key="customer.id"
-                      class="group flex items-center gap-5 border-b border-gray-200 py-2 "
+                      class="group flex items-center gap-5 border-b border-gray-200 py-2"
                     >
-                      <span class=" min-w-xs">{{ customer.fullName }}</span>
-                      <span class=" min-w-2xs">{{ customer.email }}</span>
+                      <span class="min-w-xs">{{ customer.fullName }}</span>
+                      <span class="min-w-2xs">{{ customer.email }}</span>
                       <span class="">{{ customer.phone }}</span>
-                      
+
                       <span
                         class="mdi mdi-pencil w-6 h-6 hidden group-hover:flex justify-center items-center text-blue-400 text-lg rounded-full cursor-pointer ml-2"
-                        @click.stop="
-                          editCustomer(customer);
-                        "
+                        @click.stop="editCustomer(customer)"
                       ></span>
                       <span
                         class="mdi mdi-delete w-6 h-6 hidden group-hover:flex justify-center items-center text-red-400 text-lg rounded-full cursor-pointer"
@@ -90,7 +152,7 @@
                           deleteCustomer(
                             customer['@id'].split('/').pop(),
                             userId,
-                          );
+                          )
                         "
                       ></span>
                     </li>
@@ -104,8 +166,13 @@
         </tbody>
       </table>
     </div>
+
+    <div v-else>
+      <h3 class="text-center mt-20">Malumot topilmadi!</h3>
+    </div>
   </div>
 
+  <!-- Company dialog -->
   <Dialog
     v-model:visible="visible"
     modal
@@ -126,18 +193,33 @@
         autocomplete="off"
       />
     </div>
-    <div class="flex items-center gap-4 mb-8">
-      <label for="phone" class="font-semibold w-24 text-gray-500">
-        Telefon
+
+    <div class="flex items-center gap-4 mb-4">
+      <label for="email" class="font-semibold w-24 text-gray-500">
+        Email
       </label>
 
       <InputText
-        id="phone"
-        v-model="companyData.phone"
+        id="email"
+        v-model="companyData.email"
         class="flex-auto"
         autocomplete="off"
       />
     </div>
+
+    <div class="flex items-center gap-4 mb-8">
+      <label for="password" class="font-semibold w-24 text-gray-500">
+        Password
+      </label>
+
+      <InputText
+        id="password"
+        v-model="companyData.password"
+        class="flex-auto"
+        autocomplete="off"
+      />
+    </div>
+
     <div class="flex justify-end gap-2">
       <Button
         type="button"
@@ -223,12 +305,12 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
 const companyStore = useCompanyStore();
+
 const authStore = useAuthStore();
 
 const confirm = useConfirm();
 const toast = useToast();
 
-// O'zgaruvchilar
 const userId = computed(() => authStore.state.user?.id);
 const visible = ref(false);
 const visible2 = ref(false);
@@ -237,7 +319,8 @@ const isEdit2 = ref(false);
 // const openedCompany = ref(null);
 const companyData = ref({
   name: "",
-  phone: "",
+  email: "",
+  password: "",
 });
 const customerData = ref({
   fullName: "",
@@ -245,7 +328,11 @@ const customerData = ref({
   phone: "",
   company: null,
 });
-let term = ref("");
+
+let termCompany = ref("");
+let termEmail = ref("");
+let termPassword = ref("");
+let termActivity = ref("");
 
 function toggleCompany(companyId) {
   if (customerData.value.company === companyId) {
@@ -258,7 +345,8 @@ function toggleCompany(companyId) {
 function resetForm() {
   companyData.value = {
     name: "",
-    phone: "",
+    email: "",
+    password: "",
     user: `/api/users/${userId.value}`,
   };
 
@@ -288,14 +376,12 @@ function cancel2() {
 async function saveCompany() {
   try {
     if (isEdit.value) {
-      await companyStore.updateMyCompany(
-        companyData.value.id,
-        {
-          name: companyData.value.name,
-          phone: companyData.value.phone,
-          user: `/api/users/${userId.value}`,
-        },
-      );
+      await companyStore.updateMyCompany(companyData.value.id, {
+        name: companyData.value.name,
+        email: companyData.value.email,
+        password: companyData.value.password,
+        user: `/api/users/${userId.value}`,
+      });
 
       toast.add({
         severity: "success",
@@ -304,13 +390,12 @@ async function saveCompany() {
         life: 3000,
       });
     } else {
-      await companyStore.createMyCompany(
-        {
-          name: companyData.value.name,
-          phone: companyData.value.phone,
-          user: `/api/users/${userId.value}`,
-        },
-      );
+      await companyStore.createMyCompany({
+        name: companyData.value.name,
+        email: companyData.value.email,
+        password: companyData.value.password,
+        user: `/api/users/${userId.value}`,
+      });
 
       toast.add({
         severity: "success",
@@ -337,15 +422,12 @@ async function saveCompany() {
 async function saveCustomer() {
   try {
     if (isEdit2.value) {
-      await companyStore.editCustomer(
-        customerData.value.id,
-        {
-          fullName: customerData.value.fullName,
-          email: customerData.value.email,
-          phone: customerData.value.phone,
-          company: customerData.value.company,
-        },
-      );
+      await companyStore.editCustomer(customerData.value.id, {
+        fullName: customerData.value.fullName,
+        email: customerData.value.email,
+        phone: customerData.value.phone,
+        company: customerData.value.company,
+      });
 
       toast.add({
         severity: "success",
@@ -354,14 +436,12 @@ async function saveCustomer() {
         life: 3000,
       });
     } else {
-      await companyStore.createCustomer(
-        {
-          fullName: customerData.value.fullName,
-          email: customerData.value.email,
-          phone: customerData.value.phone,
-          company: customerData.value.company,
-        },
-      );
+      await companyStore.createCustomer({
+        fullName: customerData.value.fullName,
+        email: customerData.value.email,
+        phone: customerData.value.phone,
+        company: customerData.value.company,
+      });
 
       toast.add({
         severity: "success",
@@ -394,7 +474,6 @@ function editCompany(company) {
     name: company.name,
     phone: company.phone,
     user: `/api/users/${userId.value}`,
-    
   };
 
   visible.value = true;
@@ -491,14 +570,56 @@ const deleteCustomer = (customerId, userId) => {
   });
 };
 
+// const filteredCompanies = computed(() => {
+//   return companyStore.state.myCompanies.filter((company) => {
+//     return (
+//       company.name.toLowerCase().includes(term.value.toLowerCase()) ||
+//       company.phone.toLowerCase().includes(term.value.toLowerCase())
+//     );
+//   });
+// });
 const filteredCompanies = computed(() => {
   return companyStore.state.myCompanies.filter((company) => {
-    return (
-      company.name.toLowerCase().includes(term.value.toLowerCase()) ||
-      company.phone.toLowerCase().includes(term.value.toLowerCase())
-    );
+    const matchName = company.name
+      ?.toLowerCase()
+      .includes(termCompany.value.toLowerCase());
+
+    const matchEmail = company.email
+      ?.toLowerCase()
+      .includes(termEmail.value.toLowerCase());
+
+    const matchPassword = company.password
+      ?.toLowerCase()
+      .includes(termPassword.value.toLowerCase());
+
+    const matchActivity = lastActivity(company.createdAt)
+      ?.toLowerCase()
+      .includes(termActivity.value.toLowerCase());
+
+    return matchName && matchEmail && matchPassword && matchActivity;
   });
 });
+
+function lastActivity(date) {
+  if (!date) return "-";
+
+  const now = new Date();
+  const past = new Date(date);
+
+  if (isNaN(past.getTime())) return "-";
+
+  const diffMs = now - past;
+
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 60) return `${diffSec} soniya oldin`;
+  if (diffMin < 60) return `${diffMin} daqiqa oldin`;
+  if (diffHour < 24) return `${diffHour} soat oldin`;
+  return `${diffDay} kun oldin`;
+}
 </script>
 
 <style scoped></style>
