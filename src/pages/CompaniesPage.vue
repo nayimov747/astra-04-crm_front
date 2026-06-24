@@ -16,7 +16,7 @@
       ></span>
     </h4>
 
-    <div class="grid grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
       <div class="bg-white shadow-md flex gap-1 items-center">
         <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
         <input
@@ -25,7 +25,7 @@
           id="searchCompany"
           placeholder="Kompaniya qidirish"
           v-model="termCompany"
-          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
         />
       </div>
       <div class="bg-white shadow-md flex gap-1 items-center">
@@ -36,7 +36,7 @@
           id="searchEmail"
           placeholder="Email qidirish"
           v-model="termEmail"
-          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
         />
       </div>
       <div class="bg-white shadow-md flex gap-1 items-center">
@@ -47,7 +47,7 @@
           id="searchPassword"
           placeholder="Parol qidirish"
           v-model="termPassword"
-          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
         />
       </div>
       <div class="bg-white shadow-md flex gap-1 items-center">
@@ -58,24 +58,24 @@
           id="searchActivity"
           placeholder="So'ngi faollikni qidirish"
           v-model="termActivity"
-          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-2 flex-1 outline-none"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
         />
       </div>
     </div>
 
-    <div v-if="filteredCompanies.length > 0" class="p-5 bg-white shadow-md">
-      <table class="w-full border-collapse">
+    <div v-if="filteredCompanies.length > 0" class="p-5 bg-white shadow-md overflow-x-auto">
+      <table class="w-full border-collapse min-w-2xl ">
         <thead>
           <tr class="border-b border-b-gray-300">
             <!-- <th class="text-left p-2">ID</th> -->
-            <th class="text-left p-2 w-72 text-[#334d6e8c] text-[13px]">
+            <th class="text-left p-2 w-72 text-[#334d6eb4] text-[13px]">
               Kompaniya nomi
             </th>
-            <th class="text-left p-2 w-72 text-[#334d6e8c] text-[13px]">
+            <th class="text-left p-2 w-72 text-[#334d6eb4] text-[13px]">
               Email
             </th>
-            <th class="text-left p-2 w-72 text-[#334d6e8c] text-[13px]">Parol</th>
-            <th class="text-left p-2 text-[#334d6e8c] text-[13px]">
+            <th class="text-left p-2 w-72 text-[#334d6eb4] text-[13px]">Parol</th>
+            <th class="text-left p-2 text-[#334d6eb4] text-[13px]">
               So'ngi faollik
             </th>
 
@@ -86,25 +86,25 @@
           <template v-for="company in filteredCompanies" :key="company['@id']">
             <tr
               @click="toggleCompany(company['@id'])"
-              class="border-b border-b-gray-300 hover:bg-gray-100 transition-colors duration-300 cursor-pointer"
+              class="border-b border-b-gray-300 hover:bg-gray-100 transition-colors duration-300 cursor-pointer group "
             >
               <!-- <td class="p-2">{{ company["@id"].split("/").pop() }}</td> -->
-              <td class="p-2 text-[15px] text-[#323C47] font-medium">
+              <td class="p-3 text-[15px] text-[#323C47] font-medium">
                 {{ company.name }}
               </td>
-              <td class="p-2 text-[13px] text-[#707683]">
+              <td class="p-3 text-[13px] text-[#707683]">
                 {{ company.email }}
               </td>
-              <td class="p-2 text-[13px] text-[#707683]">
+              <td class="p-3 text-[13px] text-[#707683]">
                 {{ company.password }}
               </td>
-              <td class="p-2 text-[13px] text-[#707683]">
+              <td class="p-3 text-[13px] text-[#707683]">
                 {{ lastActivity(company.createdAt) }}
               </td>
 
-              <td class="p-2 flex gap-2">
+              <td class="p-2 flex gap-3 ">
                 <span
-                  class="mdi mdi-pencil w-8 h-8 flex justify-center items-center text-[#2ED47A] text-xl rounded-full cursor-pointer"
+                  class="mdi mdi-pencil text-[#2ED47A] text-xl rounded-full cursor-pointer hidden group-hover:inline-block"
                   @click.stop="editCompany(company)"
                 ></span>
 
@@ -112,7 +112,7 @@
                   @click.stop="
                     deleteCompany(company['@id'].split('/').pop(), userId)
                   "
-                  class="mdi mdi-delete w-8 h-8 flex justify-center items-center text-red-400 text-xl rounded-full cursor-pointer"
+                  class="mdi mdi-delete text-red-400 text-xl rounded-full cursor-pointer hidden group-hover:inline-block"
                 ></span>
               </td>
             </tr>
@@ -213,6 +213,7 @@
       </label>
 
       <InputText
+      type="password"
         id="password"
         v-model="companyData.password"
         class="flex-auto"
@@ -472,7 +473,8 @@ function editCompany(company) {
   companyData.value = {
     id: company["@id"].split("/").pop(),
     name: company.name,
-    phone: company.phone,
+    email: company.email,
+    password: company.password,
     user: `/api/users/${userId.value}`,
   };
 
@@ -570,14 +572,6 @@ const deleteCustomer = (customerId, userId) => {
   });
 };
 
-// const filteredCompanies = computed(() => {
-//   return companyStore.state.myCompanies.filter((company) => {
-//     return (
-//       company.name.toLowerCase().includes(term.value.toLowerCase()) ||
-//       company.phone.toLowerCase().includes(term.value.toLowerCase())
-//     );
-//   });
-// });
 const filteredCompanies = computed(() => {
   return companyStore.state.myCompanies.filter((company) => {
     const matchName = company.name

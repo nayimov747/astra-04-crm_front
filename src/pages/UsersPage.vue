@@ -1,18 +1,8 @@
 <template>
   <div class="flex flex-col gap-5 w-full">
-    <div
-      class="p-5 bg-white rounded-lg shadow-md flex items-center gap-2 justify-between"
-    >
-      <input
-        type="text"
-        name="search"
-        id="search"
-        placeholder="Search by name or email"
-        class="w-100 p-2 border border-gray-300 rounded-md"
-        v-model="term"
-      />
+    <div class="px-5 py-3 bg-white flex items-center gap-2 justify-end">
       <button
-        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 text-nowrap cursor-pointer"
+        class="bg-[#109CF1] text-white text-[13px] font-semibold px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300 text-nowrap cursor-pointer"
         @click="visible = true"
       >
         Foydalanuvchi qo'shish
@@ -78,40 +68,101 @@
         </div>
       </Dialog>
     </div>
-    <div class="p-5 bg-white shadow-md rounded-lg">
+
+    <h4 class="text-xs">
+      Foydalanuvchi:
+      <span class="text-[#109CF1]"
+        >Hammasi <i class="mdi mdi-menu-down -ml-1"></i
+      ></span>
+    </h4>
+
+    <div class="grid grid-cols-4 gap-5">
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchUser"
+          id="searchUser"
+          placeholder="Foydalanuvchi qidirish"
+          v-model="termUser"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
+        />
+      </div>
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchEmail"
+          id="searchEmail"
+          placeholder="Email qidirish"
+          v-model="termEmail"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
+        />
+      </div>
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchPassword"
+          id="searchPassword"
+          placeholder="Parol qidirish"
+          v-model="termPassword"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
+        />
+      </div>
+      <div class="bg-white shadow-md flex gap-1 items-center">
+        <i class="mdi mdi-magnify pl-4 text-xl text-[#C2CFE0]"></i>
+        <input
+          type="text"
+          name="searchActivity"
+          id="searchActivity"
+          placeholder="So'ngi faollikni qidirish"
+          v-model="termActivity"
+          class="placeholder:text-[#90A0B7] placeholder:text-xs text-xs text-[#90A0B7] p-3 flex-1 outline-none"
+        />
+      </div>
+    </div>
+
+    <div v-if="filteredUsers.length" class="p-5 bg-white shadow-md">
       <table class="w-full border-collapse">
         <thead>
           <tr class="border-b border-b-gray-300">
-            <th class="text-left p-2">№</th>
-            <th class="text-left p-2">Ism</th>
-            <th class="text-left p-2">Email</th>
-            <th class="text-left p-2">Role</th>
-            <th class="text-left p-2">Amallar</th>
+            <!-- <th class="text-left p-2">№</th> -->
+            <th class="text-left p-2 w-72 text-[#334d6eb4] text-[13px]">Ism</th>
+            <th class="text-left p-2 w-72 text-[#334d6eb4] text-[13px]">
+              Email
+            </th>
+            <th class="text-left p-2 w-60 text-[#334d6eb4] text-[13px]">
+              Parol
+            </th>
+            <th class="text-left p-2 text-[#334d6eb4] text-[13px]">
+              So'ngi faollik
+            </th>
+            <th class="text-left p-2 text-[#334d6eb4] text-[13px]"></th>
           </tr>
         </thead>
         <tbody>
           <tr
             v-for="user in filteredUsers"
             :key="user.id"
-            class="border-b border-b-gray-300 hover:bg-gray-100 transition-colors duration-300 last:border-b-0"
-            :class="
-              user.email === authStore.state.user?.email
-                ? 'bg-zinc-800 text-white hover:bg-zinc-700'
-                : ''
-            "
+            class="border-b border-b-gray-300  transition-colors duration-300 last:border-b-0 group"
+            
           >
             <!-- <td class="p-2">{{ userStore.state.users.indexOf(user) + 1 }}</td> -->
-            <td class="p-2">{{ user['@id'].split('/').pop() }}</td>
-            <td class="p-2">{{ user.fullName }}</td>
-            <td class="p-2">{{ user.email }}</td>
-            <td class="p-2">{{ user.roles.join(", ") }}</td>
-            <td class="p-2 flex gap-2">
+            <!-- <td class="p-2">{{ user['@id'].split('/').pop() }}</td> -->
+            <td class="p-3 text-[15px] text-[#506072] font-medium">
+              {{ user.fullName }}
+            </td>
+            <td class="p-3 text-[13px] text-[#707683]">{{ user.email }}</td>
+            <td class="p-3 text-[13px] text-[#707683]">{{ user.password }}</td>
+            <td class="p-3 text-[13px] text-[#707683]">{{ lastActivity(user.createdAt) }}</td>
+            <td class="p-2 flex gap-3">
               <span
-                class="mdi mdi-pencil w-8 h-8 flex justify-center items-center text-blue-400 text-xl rounded-full cursor-pointer"
+                class="mdi mdi-pencil text-[#2ED47A] text-xl rounded-full cursor-pointer hidden group-hover:inline-block"
                 @click="editUser(user)"
               ></span>
               <button
-                class="mdi mdi-delete w-8 h-8 flex justify-center items-center text-red-400 text-xl rounded-full cursor-pointer"
+                class="mdi mdi-delete text-red-400 text-xl rounded-full cursor-pointer hidden group-hover:inline-block"
                 @click="deleteUser(user['@id'].split('/').pop())"
                 v-if="user.email !== authStore.state.user?.email"
               ></button>
@@ -119,6 +170,10 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div v-else>
+      <h3 class="text-center mt-20">Malumot topilmadi!</h3>
     </div>
   </div>
 
@@ -151,7 +206,11 @@ const userData = ref({
   email: "",
   password: "",
 });
-let term = ref("");
+
+let termUser = ref("");
+let termEmail = ref("");
+let termPassword = ref("");
+let termActivity = ref("");
 
 function resetForm() {
   userData.value = {
@@ -264,14 +323,58 @@ const deleteUser = (userId) => {
   });
 };
 
+// const filteredUsers = computed(() => {
+//   return userStore.state.users.filter((user) => {
+//     return (
+//       user.fullName.toLowerCase().includes(term.value.toLowerCase()) ||
+//       user.email.toLowerCase().includes(term.value.toLowerCase())
+//     );
+//   });
+// });
+
 const filteredUsers = computed(() => {
   return userStore.state.users.filter((user) => {
-    return (
-      user.fullName.toLowerCase().includes(term.value.toLowerCase()) ||
-      user.email.toLowerCase().includes(term.value.toLowerCase())
-    );
+    const matchName = user.fullName
+      ?.toLowerCase()
+      .includes(termUser.value.toLowerCase());
+
+    const matchEmail = user.email
+      ?.toLowerCase()
+      .includes(termEmail.value.toLowerCase());
+
+    const matchPassword = user.password
+      ?.toLowerCase()
+      .includes(termPassword.value.toLowerCase());
+
+    const matchActivity = lastActivity(user.createdAt)
+      ?.toLowerCase()
+      .includes(termActivity.value.toLowerCase());
+
+    return matchName && matchEmail && matchPassword && matchActivity;
   });
 });
+
+const lastActivity = (date) => {
+    if (!date) return "-";
+
+    const now = new Date();
+    const past = new Date(date);
+
+    if (isNaN(past.getTime())) return "-";
+
+    const diffMs = now - past;
+
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffSec < 60) return `${diffSec} soniya oldin`;
+    if (diffMin < 60) return `${diffMin} daqiqa oldin`;
+    if (diffHour < 24) return `${diffHour} soat oldin`;
+
+    return `${diffDay} kun oldin`;
+};
 </script>
 
 <style scoped></style>
