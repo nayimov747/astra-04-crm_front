@@ -7,7 +7,6 @@ const api = axios.create({
   },
 });
 
-// 🔐 token avtomatik qo‘shish
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
 

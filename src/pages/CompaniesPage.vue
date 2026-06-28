@@ -115,52 +115,6 @@
                 ></span>
               </td>
             </tr>
-
-            <!-- <tr v-if="customerData.company === company['@id']">
-              <td colspan="4" class="bg-gray-50 p-4">
-                <div>
-                  <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-semibold text-gray-600 mb-2">
-                      Mijozlar:
-                    </h3>
-                    <button
-                      @click="visible2 = true"
-                      class="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-1 px-3 rounded text-sm"
-                    >
-                      Mijoz qo'shish
-                    </button>
-                  </div>
-
-                  <ul class="list-disc list-inside">
-                    <li
-                      v-for="customer in company.customers"
-                      :key="customer.id"
-                      class="group flex items-center gap-5 border-b border-gray-200 py-2"
-                    >
-                      <span class="min-w-xs">{{ customer.fullName }}</span>
-                      <span class="min-w-2xs">{{ customer.email }}</span>
-                      <span class="">{{ customer.phone }}</span>
-
-                      <span
-                        class="mdi mdi-pencil w-6 h-6 hidden group-hover:flex justify-center items-center text-blue-400 text-lg rounded-full cursor-pointer ml-2"
-                        @click.stop="editCustomer(customer)"
-                      ></span>
-                      <span
-                        class="mdi mdi-delete w-6 h-6 hidden group-hover:flex justify-center items-center text-red-400 text-lg rounded-full cursor-pointer"
-                        @click.stop="
-                          deleteCustomer(
-                            customer['@id'].split('/').pop(),
-                            userId,
-                          )
-                        "
-                      ></span>
-                    </li>
-                  </ul>
-                </div>
-
-                
-              </td>
-            </tr> -->
           </template>
         </tbody>
       </table>
@@ -171,7 +125,6 @@
     </div>
   </div>
 
-  <!-- Company dialog -->
   <Dialog
     v-model:visible="visible"
     modal
@@ -179,9 +132,6 @@
     :style="{ width: '25rem' }"
     :closable="false"
   >
-    <!-- <span class="text-gray-500 dark:text-gray-400 block mb-8"
-          >Yangi foydalanuvchi qo'shish</span
-        > -->
     <div class="flex items-center gap-4 mb-4">
       <label for="name" class="font-semibold w-24 text-gray-500"
         >Kompaniya nomi</label
@@ -255,7 +205,6 @@ const toast = useToast();
 const userId = computed(() => authStore.state.user?.id);
 const visible = ref(false);
 const isEdit = ref(false);
-// const openedCompany = ref(null);
 const companyData = ref({
   name: "",
   email: "",

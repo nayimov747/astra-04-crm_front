@@ -16,9 +16,7 @@
         :style="{ width: '25rem' }"
         :closable="false"
       >
-        <!-- <span class="text-gray-500 dark:text-gray-400 block mb-8"
-          >Yangi foydalanuvchi qo'shish</span
-        > -->
+       
         <div class="flex items-center gap-4 mb-4">
           <label for="fullName" class="font-semibold w-24 text-gray-500"
             >Full Name</label
@@ -203,8 +201,6 @@
     </div>
   </div>
 
-  <!-- <Toast />
-  <ConfirmDialog></ConfirmDialog> -->
 </template>
 
 <script setup>
@@ -224,7 +220,6 @@ const toast = useToast();
 
 userStore.fetchUsers();
 
-// O'zgaruvchilar
 const visible = ref(false);
 const isEdit = ref(false);
 const userData = ref({
@@ -248,7 +243,6 @@ function resetForm() {
   isEdit.value = false;
 }
 
-// Cancel the user creation/editing process
 function cancel() {
   visible.value = false;
   resetForm();
@@ -348,15 +342,6 @@ const deleteUser = (userId) => {
     },
   });
 };
-
-// const filteredUsers = computed(() => {
-//   return userStore.state.users.filter((user) => {
-//     return (
-//       user.fullName.toLowerCase().includes(term.value.toLowerCase()) ||
-//       user.email.toLowerCase().includes(term.value.toLowerCase())
-//     );
-//   });
-// });
 
 const filteredUsers = computed(() => {
   return userStore.state.users.filter((user) => {
