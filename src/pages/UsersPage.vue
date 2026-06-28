@@ -14,6 +14,7 @@
           isEdit ? 'Foydalanuvchini tahrirlash' : 'Foydalanuvchi qo‘shish'
         "
         :style="{ width: '25rem' }"
+        :closable="false"
       >
         <!-- <span class="text-gray-500 dark:text-gray-400 block mb-8"
           >Yangi foydalanuvchi qo'shish</span
@@ -145,17 +146,42 @@
           <tr
             v-for="user in filteredUsers"
             :key="user.id"
-            class="border-b border-b-gray-300  transition-colors duration-300 last:border-b-0 group"
-            
+            class="border-b border-b-gray-300 transition-colors duration-300 last:border-b-0 group"
           >
             <!-- <td class="p-2">{{ userStore.state.users.indexOf(user) + 1 }}</td> -->
             <!-- <td class="p-2">{{ user['@id'].split('/').pop() }}</td> -->
-            <td class="p-3 text-[15px] text-[#506072] font-medium">
+            <td
+              class="p-3 text-[15px] text-[#506072] font-medium"
+              :class="{
+                'text-blue-400': user.email === authStore.state.user?.email,
+              }"
+            >
               {{ user.fullName }}
             </td>
-            <td class="p-3 text-[13px] text-[#707683]">{{ user.email }}</td>
-            <td class="p-3 text-[13px] text-[#707683]">{{ user.password }}</td>
-            <td class="p-3 text-[13px] text-[#707683]">{{ lastActivity(user.createdAt) }}</td>
+            <td
+              class="p-3 text-[13px] text-[#707683]"
+              :class="{
+                'text-blue-400': user.email === authStore.state.user?.email,
+              }"
+            >
+              {{ user.email }}
+            </td>
+            <td
+              class="p-3 text-[13px] text-[#707683]"
+              :class="{
+                'text-blue-400': user.email === authStore.state.user?.email,
+              }"
+            >
+              {{ user.password }}
+            </td>
+            <td
+              class="p-3 text-[13px] text-[#707683]"
+              :class="{
+                'text-blue-400': user.email === authStore.state.user?.email,
+              }"
+            >
+              {{ lastActivity(user.createdAt) }}
+            </td>
             <td class="p-2 flex gap-3">
               <span
                 class="mdi mdi-pencil text-[#2ED47A] text-xl rounded-full cursor-pointer hidden group-hover:inline-block"
@@ -355,25 +381,25 @@ const filteredUsers = computed(() => {
 });
 
 const lastActivity = (date) => {
-    if (!date) return "-";
+  if (!date) return "-";
 
-    const now = new Date();
-    const past = new Date(date);
+  const now = new Date();
+  const past = new Date(date);
 
-    if (isNaN(past.getTime())) return "-";
+  if (isNaN(past.getTime())) return "-";
 
-    const diffMs = now - past;
+  const diffMs = now - past;
 
-    const diffSec = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSec / 60);
-    const diffHour = Math.floor(diffMin / 60);
-    const diffDay = Math.floor(diffHour / 24);
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
 
-    if (diffSec < 60) return `${diffSec} soniya oldin`;
-    if (diffMin < 60) return `${diffMin} daqiqa oldin`;
-    if (diffHour < 24) return `${diffHour} soat oldin`;
+  if (diffSec < 60) return `${diffSec} soniya oldin`;
+  if (diffMin < 60) return `${diffMin} daqiqa oldin`;
+  if (diffHour < 24) return `${diffHour} soat oldin`;
 
-    return `${diffDay} kun oldin`;
+  return `${diffDay} kun oldin`;
 };
 </script>
 

@@ -85,8 +85,7 @@
         <tbody>
           <template v-for="company in filteredCompanies" :key="company['@id']">
             <tr
-              @click="toggleCompany(company['@id'])"
-              class="border-b border-b-gray-300 hover:bg-gray-100 transition-colors duration-300 cursor-pointer group "
+              class="border-b border-b-gray-300 hover:bg-gray-100 transition-colors duration-300 last:border-b-0 group "
             >
               <!-- <td class="p-2">{{ company["@id"].split("/").pop() }}</td> -->
               <td class="p-3 text-[15px] text-[#323C47] font-medium">
@@ -117,7 +116,7 @@
               </td>
             </tr>
 
-            <tr v-if="customerData.company === company['@id']">
+            <!-- <tr v-if="customerData.company === company['@id']">
               <td colspan="4" class="bg-gray-50 p-4">
                 <div>
                   <div class="flex justify-between items-center">
@@ -159,9 +158,9 @@
                   </ul>
                 </div>
 
-                <!-- <div v-else class="text-gray-400">Mijozlar mavjud emas</div> -->
+                
               </td>
-            </tr>
+            </tr> -->
           </template>
         </tbody>
       </table>
@@ -178,6 +177,7 @@
     modal
     :header="isEdit ? 'Kompaniya tahrirlash' : 'Kompaniya qo‘shish'"
     :style="{ width: '25rem' }"
+    :closable="false"
   >
     <!-- <span class="text-gray-500 dark:text-gray-400 block mb-8"
           >Yangi foydalanuvchi qo'shish</span
@@ -235,66 +235,6 @@
       />
     </div>
   </Dialog>
-
-  <!-- Customer dialog -->
-  <Dialog
-    v-model:visible="visible2"
-    modal
-    :header="isEdit2 ? 'Mijoz tahrirlash' : 'Mijoz qo‘shish'"
-    :style="{ width: '25rem' }"
-  >
-    <!-- <span class="text-gray-500 dark:text-gray-400 block mb-8"
-          >Yangi foydalanuvchi qo'shish</span
-        > -->
-    <div class="flex items-center gap-4 mb-4">
-      <label for="name" class="font-semibold w-24 text-gray-500"
-        >Mijoz nomi</label
-      >
-      <InputText
-        id="name"
-        v-model="customerData.fullName"
-        class="flex-auto"
-        autocomplete="off"
-      />
-    </div>
-    <div class="flex items-center gap-4 mb-4">
-      <label for="email" class="font-semibold w-24 text-gray-500">
-        Email
-      </label>
-
-      <InputText
-        id="email"
-        v-model="customerData.email"
-        class="flex-auto"
-        autocomplete="off"
-      />
-    </div>
-    <div class="flex items-center gap-4 mb-8">
-      <label for="phone" class="font-semibold w-24 text-gray-500">
-        Telefon
-      </label>
-
-      <InputText
-        id="phone"
-        v-model="customerData.phone"
-        class="flex-auto"
-        autocomplete="off"
-      />
-    </div>
-    <div class="flex justify-end gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        severity="secondary"
-        @click="cancel2"
-      ></Button>
-      <Button
-        type="submit"
-        :label="isEdit2 ? 'Update' : 'Save'"
-        @click="saveCustomer"
-      />
-    </div>
-  </Dialog>
 </template>
 
 <script setup>
@@ -314,34 +254,18 @@ const toast = useToast();
 
 const userId = computed(() => authStore.state.user?.id);
 const visible = ref(false);
-const visible2 = ref(false);
 const isEdit = ref(false);
-const isEdit2 = ref(false);
 // const openedCompany = ref(null);
 const companyData = ref({
   name: "",
   email: "",
   password: "",
 });
-const customerData = ref({
-  fullName: "",
-  email: "",
-  phone: "",
-  company: null,
-});
 
 let termCompany = ref("");
 let termEmail = ref("");
 let termPassword = ref("");
 let termActivity = ref("");
-
-function toggleCompany(companyId) {
-  if (customerData.value.company === companyId) {
-    customerData.value.company = null;
-  } else {
-    customerData.value.company = companyId;
-  }
-}
 
 function resetForm() {
   companyData.value = {
@@ -353,25 +277,10 @@ function resetForm() {
 
   isEdit.value = false;
 }
-function resetForm2() {
-  customerData.value = {
-    fullName: "",
-    email: "",
-    phone: "",
-    company: null,
-  };
 
-  isEdit2.value = false;
-}
-
-// Cancel the company creation/editing process
 function cancel() {
   visible.value = false;
   resetForm();
-}
-function cancel2() {
-  visible2.value = false;
-  resetForm2();
 }
 
 async function saveCompany() {
@@ -420,53 +329,6 @@ async function saveCompany() {
   }
 }
 
-async function saveCustomer() {
-  try {
-    if (isEdit2.value) {
-      await companyStore.editCustomer(customerData.value.id, {
-        fullName: customerData.value.fullName,
-        email: customerData.value.email,
-        phone: customerData.value.phone,
-        company: customerData.value.company,
-      });
-
-      toast.add({
-        severity: "success",
-        summary: "Updated",
-        detail: "Customer updated successfully",
-        life: 3000,
-      });
-    } else {
-      await companyStore.createCustomer({
-        fullName: customerData.value.fullName,
-        email: customerData.value.email,
-        phone: customerData.value.phone,
-        company: customerData.value.company,
-      });
-
-      toast.add({
-        severity: "success",
-        summary: "Created",
-        detail: "Customer created successfully",
-        life: 3000,
-      });
-    }
-
-    cancel2();
-    companyStore.fetchMyCompanies(userId.value);
-    // toggleCompany(customerData.value.company);
-  } catch (error) {
-    console.log(error);
-
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: "Something went wrong",
-      life: 3000,
-    });
-  }
-}
-
 function editCompany(company) {
   isEdit.value = true;
   console.log(company);
@@ -480,19 +342,7 @@ function editCompany(company) {
 
   visible.value = true;
 }
-function editCustomer(customer) {
-  isEdit2.value = true;
-  console.log(customer);
-  customerData.value = {
-    id: customer["@id"].split("/").pop(),
-    fullName: customer.fullName,
-    email: customer.email,
-    phone: customer.phone,
-    company: customer.company,
-  };
 
-  visible2.value = true;
-}
 
 const deleteCompany = (companyId, userId) => {
   confirm.require({
@@ -533,44 +383,7 @@ const deleteCompany = (companyId, userId) => {
   });
 };
 
-const deleteCustomer = (customerId, userId) => {
-  confirm.require({
-    message: "Do you want to delete this record?",
-    header: "Danger Zone",
-    icon: "pi pi-info-circle",
 
-    rejectProps: {
-      label: "Cancel",
-      severity: "secondary",
-      outlined: true,
-    },
-
-    acceptProps: {
-      label: "Delete",
-      severity: "danger",
-    },
-
-    accept: async () => {
-      await companyStore.deleteCustomer(customerId, userId);
-
-      toast.add({
-        severity: "info",
-        summary: "Confirmed",
-        detail: "Record deleted",
-        life: 3000,
-      });
-    },
-
-    reject: () => {
-      toast.add({
-        severity: "warn",
-        summary: "Cancelled",
-        detail: "Delete cancelled",
-        life: 3000,
-      });
-    },
-  });
-};
 
 const filteredCompanies = computed(() => {
   return companyStore.state.myCompanies.filter((company) => {

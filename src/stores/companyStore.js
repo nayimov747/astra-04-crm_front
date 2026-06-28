@@ -17,6 +17,16 @@ export const useCompanyStore = defineStore("company", () => {
   //   return customers;
   // });
 
+  const getMyCustomers = computed(() => {
+    return state.value.myCompanies.flatMap((company) =>
+      company.customers.map((customer) => ({
+        ...customer,
+        companyId: company['@id'],
+        company
+      })),
+    );
+  });
+
   const getMyCustomersCount = computed(() => {
     let count = 0;
 
@@ -124,6 +134,7 @@ export const useCompanyStore = defineStore("company", () => {
 
   return {
     state,
+    getMyCustomers,
     getMyCustomersCount,
     fetchMyCompanies,
     createMyCompany,
